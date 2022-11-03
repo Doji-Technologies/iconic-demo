@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en-us">
   <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-0TPX5HHZD2"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-0TPX5HHZD2');
+    </script>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Unity WebGL Player | Iconic - Ico Inspector</title>
@@ -120,7 +128,20 @@
               event.preventDefault();
               const files = event.dataTransfer.files;
               const first = files[0];
-              unityInstance.SendMessage("FileReceiver", "FileSelected", window.URL.createObjectURL(first), first);
+			  var extension = first.name.split('.').pop();
+			  switch (extension) {
+                  case "ico":
+					  unityInstance.SendMessage("FileReceiver", "IcoSelected", window.URL.createObjectURL(first), first);
+					  break;
+				  case "png":
+				  case "jpg":
+				  case "jpeg":
+					  unityInstance.SendMessage("FileReceiver", "ImageSelected", window.URL.createObjectURL(first), first);
+					  break;
+                  default:
+					  console.log("Error", "Unsupported file type: " + extension);
+                      break;
+			  }
           });
 
         }).catch((message) => {
